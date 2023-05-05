@@ -1,11 +1,11 @@
-const userService = require('../services/user.service')
+import UserService from '../services/user.service.js'
 
 const create = async (req, res) => {
   try {
     const { name, username, email, password } = req.body
     if (!name || !username || !email || !password) return res.status(400).send({ message: 'Existe algum campo invalido' })
 
-    const user = await userService.createService(req.body)
+    const user = await UserService.createService(req.body)
 
     if (!user) return res.status(400).send({ message: "Error creating user" })
 
@@ -26,7 +26,7 @@ const create = async (req, res) => {
 
 const findAllUsers = async (req, res) => {
   try {
-    const users = await userService.findAllUsersService()
+    const users = await UserService.findAllUsersService()
     if (users.length === 0) return res.status(400).send({ message: "Não há usuarios cadastrados" })
     res.send(users)
   }
@@ -50,7 +50,7 @@ const updateById = async (req, res) => {
     const { name, username, email, password } = req.body
     if (!name && !username && !email && !password) return res.status(400).send({ message: 'Submit at least one field for update' })
     const { id, user } = req
-    await userService.updateService(id, name, username, email, password)
+    await UserService.updateService(id, name, username, email, password)
     res.send({ message: 'User successfully updated' })
   }
   catch (err) {
@@ -58,4 +58,4 @@ const updateById = async (req, res) => {
   }
 }
 
-module.exports = { create, findAllUsers, findUserById, updateById }
+export default { create, findAllUsers, findUserById, updateById }

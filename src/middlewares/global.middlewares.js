@@ -1,5 +1,5 @@
-const mongoose = require('mongoose')
-const userService = require('../services/user.service')
+import mongoose from 'mongoose'
+import UserService from '../services/user.service.js'
 
 const validId = (req, res, next) => {
   try {
@@ -15,7 +15,7 @@ const validId = (req, res, next) => {
 const validUser = async (req, res, next) => {
   try {
     const id = req.params.id
-    const user = await userService.findUserByIdService(id)
+    const user = await UserService.findUserByIdService(id)
     if (!user) return res.status(400).send({ message: "User not found" })
     req.id = id
     req.user = user
@@ -26,7 +26,7 @@ const validUser = async (req, res, next) => {
   }
 }
 
-module.exports = {
+export default {
   validId,
   validUser
 }
