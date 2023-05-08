@@ -2,16 +2,18 @@ import SpentService from '../services/spent.service.js'
 
 const create = async (req, res) => {
   try {
-    const { date, description, category, spentValue, creditCard } = req.body
-    if (!date || !description || !category || !spentValue || !creditCard)
-      return res.status(400).send({ message: 'Existe algum campo invalido' })
+    const payload = req.body
 
-    const spent = await SpentService.createSpentService(req.body)
-
-    if (!spent) return res.status(400).send({ message: "Error creating spent" })
-
-    res.status(201).send({ message: "Spent created succesfully", spent })
-  } catch (err) {
+    if (!payload.length) {
+      const spent = await SpentService.createSpentService(payload)
+      if (!spent) return res.status(400).send({ message: "Error creating spent" })
+    }
+    else {
+      payload.forEach(async (spent) => await SpentService.createSpentService(spent))
+    }
+    res.status(201).send({ message: "Spent created succesfully", payload })
+  }
+  catch (err) {
     res.status(500).send({ message: err.message })
   }
 }
@@ -19,7 +21,7 @@ const create = async (req, res) => {
 const findAllSpents = async (req, res) => {
   try {
     const spent = await SpentService.findAllSpentsService()
-    if (spent.length === 0) return res.status(400).send({ message: "Não há usuarios cadastrados" })
+    if (spent.length === 0) return res.status(400).send({ message: "Não há despesas cadastradas" })
     res.send(spent)
   }
   catch (err) {
@@ -40,8 +42,8 @@ const deleteById = async (req, res) => {
 
 const updateById = async (req, res) => {
   try {
-    const { date, description, category, spentValue, creditCard } = req.body
-    if (!date && !description && !category && !spentValue && !creditCard) return res.status(400).send({ message: 'Submit at least one field for update' })
+    const { date, description, category, spentValue, creditCard, quota } = req.body
+    if (!date && !description && !category && !spentValue && !creditCard && !quota) return res.status(400).send({ message: 'Submit at least one field for update' })
     const { id } = req.params
     await SpentService.updateService(id, date, description, category, spentValue, creditCard)
     res.send({ message: 'User successfully updated' })

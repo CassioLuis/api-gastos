@@ -1,8 +1,7 @@
 import mongoose from 'mongoose'
 import SpentService from '../services/spent.service.js'
 import { convertDateToStringDate } from '../utils/handling.dates.js'
-import { createNextSpentsForQuotas } from '../utils/handling.quotas.js'
-
+import { createNextSpentsByQuotas } from '../utils/handling.quotas.js'
 
 export const createNewProperty = (req, res, next) => {
   try {
@@ -17,8 +16,8 @@ export const createNewProperty = (req, res, next) => {
 
 export const createSpentsQuotas = (req, res, next) => {
   try {
-    const body = createNextSpentsForQuotas(req.body)
-    console.log(body);
+    if (!req.body.quota) return next()
+    req.body = createNextSpentsByQuotas(req.body)
     next()
   }
   catch (err) {
@@ -49,16 +48,15 @@ export const validSpent = async (req, res, next) => {
   }
 }
 
-// const validUser = async (req, res, next) => {
-//   try {
-//     const id = req.params.id
-//     const user = await UserService.findUserByIdService(id)
-//     if (!user) return res.status(400).send({ message: "User not found" })
-//     req.id = id
-//     req.user = user
-//     next()
-//   }
-//   catch (err) {
-//     res.status(500).send({ message: err.message })
-//   }
-// }
+export const validateRequest = (req, res, next) => {
+  try {
+    const { date, description, category, spentValue, creditCard } = req.body
+    if (!date || !description || !category || !spentValue || !creditCard) {
+      return res.status(400).send({ message: 'Existe algum campo invalido' })
+    }
+    next()
+  }
+  catch (err) {
+    res.status(500).send({ message: err.message })
+  }
+}

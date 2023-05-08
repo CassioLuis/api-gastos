@@ -23,9 +23,15 @@ const SpentSchema = new Schema({
     type: Boolean,
     required: true
   },
+  quota: {
+    type: String
+  },
   presentationDate: {
     type: String,
     required: true
+  },
+  presentationQuota: {
+    type: String
   }
 })
 
