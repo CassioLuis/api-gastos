@@ -4,6 +4,7 @@ import UserService from '../services/user.service.js'
 const validId = (req, res, next) => {
   try {
     const id = req.params.id
+    console.log(req.params);
     if (!mongoose.Types.ObjectId.isValid(id)) return res.status(400).send({ message: 'Invalid ID' })
     next()
   }
