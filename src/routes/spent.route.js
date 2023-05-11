@@ -1,8 +1,8 @@
-import express from 'express'
+import { Router } from 'express'
 import SpentController from '../controllers/spent.controller.js'
 import { createNewProperty, createSpentsQuotas, validId, validSpent, validateRequest } from '../middlewares/spent.middlewares.js'
 
-const route = express.Router()
+const route = Router()
 
 route.post("/", validateRequest, createNewProperty, createSpentsQuotas, SpentController.create);
 route.get("/", SpentController.findAllSpents);

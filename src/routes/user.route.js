@@ -1,9 +1,9 @@
 // const express = require('express')
-import express from 'express'
+import { Router } from 'express'
 import UserController from '../controllers/user.controller.js'
-import {validId, validUser} from '../middlewares/user.middlewares.js'
+import { validId, validUser } from '../middlewares/user.middlewares.js'
 
-const route = express.Router()
+const route = Router()
 
 route.post("/", UserController.create);
 route.get("/", UserController.findAllUsers);
