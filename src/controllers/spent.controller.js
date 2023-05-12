@@ -1,6 +1,6 @@
 import SpentService from '../services/spent.service.js'
 
-const create = async (req, res) => {
+const createSpent = async (req, res) => {
   try {
     const payload = req.body
 
@@ -20,9 +20,47 @@ const create = async (req, res) => {
 
 const findAllSpents = async (req, res) => {
   try {
-    const spent = await SpentService.findAllSpentsService()
+    let { limit, offset } = req.query
+
+    limit = Number(limit)
+    offset = Number(offset)
+
+    if (!limit) {
+      limit = 5
+    }
+    if (!offset) {
+      offset = 0
+    }
+
+    const spent = await SpentService.findAllSpentsService(offset, limit)
+    const spentTotal = await SpentService.countSpents()
+    const currentUrl = req.baseUrl
+    const next = offset + limit
+    const nextUrl = next < spentTotal ? `${currentUrl}?limit=${limit}&offset=${next}` : null
+    const previous = offset - limit < 0 ? null : offset - limit
+    const previousUrl = previous != null ? `${currentUrl}?limit=${limit}&offset=${previous}` : null
+
     if (spent.length === 0) return res.status(400).send({ message: "Não há despesas cadastradas" })
-    res.send(spent)
+    res.send({
+      nextUrl,
+      previousUrl,
+      limit,
+      offset,
+      spentTotal,
+      results: spent.map(
+        ({ _id: id, date, description, category, spentValue, creditCard, presentationDate, presentationQuota, user: { _id: userid, name } }) => ({
+          id,
+          date,
+          description,
+          category,
+          spentValue,
+          creditCard,
+          presentationDate,
+          presentationQuota,
+          userid,
+          name
+        }))
+    })
   }
   catch (err) {
     res.status(500).send({ message: err.message })
@@ -32,6 +70,7 @@ const findAllSpents = async (req, res) => {
 const deleteById = async (req, res) => {
   try {
     const id = req.params.id
+    console.log(id);
     await SpentService.deleteByIdService(id)
     res.send({ deletedSpent: id })
   }
@@ -45,12 +84,65 @@ const updateById = async (req, res) => {
     const { date, description, category, spentValue, creditCard, quota } = req.body
     if (!date && !description && !category && !spentValue && !creditCard && !quota) return res.status(400).send({ message: 'Submit at least one field for update' })
     const { id } = req.params
+    const spent = await SpentService.findSpentsByIdService(id)
+    if (req.body.user !== spent.id) return res.status(400).send({ message: "Somente o usuario que criou pode alterar" })
     await SpentService.updateService(id, date, description, category, spentValue, creditCard)
-    res.send({ message: 'User successfully updated' })
+    res.send({ message: 'Spent successfully updated' })
   }
   catch (err) {
     res.status(500).send({ message: err.message })
   }
 }
 
-export default { create, findAllSpents, deleteById, updateById }
+const searchByDescription = async (req, res) => {
+  try {
+    const { description } = req.query
+    const spents = await SpentService.searchByDescriptionService(description)
+    if (!spents.length) return res.status(400).send({ message: "Não há nenhuma despesa com essa descrição" })
+
+    res.send({
+      results: spents.map(
+        ({ _id: id, date, description, category, spentValue, creditCard, presentationDate, presentationQuota, user: { _id: userid, name } }) => ({
+          id,
+          date,
+          description,
+          category,
+          spentValue,
+          creditCard,
+          presentationDate,
+          presentationQuota,
+          userid,
+          name
+        }))
+    })
+  } catch (err) {
+    res.status(500).send({ message: err.message })
+  }
+}
+
+const findByUser = async (req, res) => {
+  try {
+    const id = req.body.user
+    const spents = await SpentService.findByUserService(id)
+    if (!spents.length) return res.status(400).send({ message: "Não há nenhuma despesa para esse usuario" })
+
+    res.send({
+      results: spents.map(
+        ({ _id: id, date, description, category, spentValue, creditCard, presentationDate, presentationQuota, user: { _id: userid, name } }) => ({
+          id,
+          date,
+          description,
+          category,
+          spentValue,
+          creditCard,
+          presentationDate,
+          presentationQuota,
+          userid,
+          name
+        }))
+    })
+  } catch (err) {
+    res.status(500).send({ message: err.message })
+  }
+}
+export default { createSpent, findAllSpents, deleteById, updateById, searchByDescription, findByUser }

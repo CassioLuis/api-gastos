@@ -32,6 +32,11 @@ const SpentSchema = new Schema({
   },
   presentationQuota: {
     type: String
+  },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: true
   }
 })
 

@@ -1,11 +1,11 @@
 import UserService from '../services/user.service.js'
 
-const create = async (req, res) => {
+const createUser = async (req, res) => {
   try {
     const { name, username, email, password } = req.body
     if (!name || !username || !email || !password) return res.status(400).send({ message: 'Existe algum campo invalido' })
 
-    const user = await UserService.createService(req.body)
+    const user = await UserService.createUserService(req.body)
 
     if (!user) return res.status(400).send({ message: "Error creating user" })
 
@@ -58,4 +58,4 @@ const updateById = async (req, res) => {
   }
 }
 
-export default { create, findAllUsers, findUserById, updateById }
+export default { createUser, findAllUsers, findUserById, updateById }
