@@ -6,7 +6,7 @@ import { authMiddleware } from '../middlewares/auth.middlewares.js';
 const route = Router()
 
 route.post("/", authMiddleware, validateRequest, createNewProperty, createSpentsQuotas, SpentController.createSpent);
-route.get("/", authMiddleware, SpentController.findAllSpents);
+route.get("/", SpentController.findAllSpents);
 route.get("/search", authMiddleware, SpentController.searchByDescription);
 route.get("/byUser", authMiddleware, SpentController.findByUser);
 route.delete("/:id", authMiddleware, validId, validSpent, SpentController.deleteById);
