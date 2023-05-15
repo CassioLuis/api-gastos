@@ -13,7 +13,7 @@ const app = express()
 const port = process.env.PORT || 8080
 
 ConnectDatabase()
-app.use(cors({ origin: ['http://localhost:3000'] }))
+app.use(cors())
 app.use(express.json())
 app.use("/users", UserRoute)
 app.use("/spents", SpentRoute)
