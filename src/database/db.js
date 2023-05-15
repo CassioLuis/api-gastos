@@ -9,7 +9,7 @@ const connectDatabase = () => {
       useNewUrlParser: true,
       useUnifiedTopology: true
     })
-    .then(() => console.log('Connect successfully!'))
+    .then(() => console.log('Connected successfully!'))
     .catch(error => console.log(error))
 }
 
