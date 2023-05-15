@@ -1,11 +1,11 @@
 import express from 'express'
-import ConnectDatabase from './src/database/db.js'
+import ConnectDatabase from './database/db.js'
 import dotenv from 'dotenv'
 
 
-import UserRoute from './src/routes/user.route.js'
-import AuthRoute from './src/routes/auth.route.js'
-import SpentRoute from './src/routes/spent.route.js'
+import UserRoute from './routes/user.route.js'
+import AuthRoute from './routes/auth.route.js'
+import SpentRoute from './routes/spent.route.js'
 
 dotenv.config();
 const app = express()
