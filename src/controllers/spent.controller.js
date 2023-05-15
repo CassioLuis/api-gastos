@@ -48,7 +48,7 @@ const findAllSpents = async (req, res) => {
       offset,
       spentTotal,
       results: spent.map(
-        ({ _id: id, date, description, category, spentValue, creditCard, presentationDate, presentationQuota, user: { _id: userid, name } }) => ({
+        ({ _id: id, date, description, category, spentValue, creditCard, presentationDate, presentationQuota, user: { _id: userid, name, email } }) => ({
           id,
           date,
           description,
@@ -58,7 +58,8 @@ const findAllSpents = async (req, res) => {
           presentationDate,
           presentationQuota,
           userid,
-          name
+          name,
+          email
         }))
     })
   }
@@ -69,10 +70,11 @@ const findAllSpents = async (req, res) => {
 
 const deleteById = async (req, res) => {
   try {
-    const id = req.params.id
-    console.log(id);
-    await SpentService.deleteByIdService(id)
-    res.send({ deletedSpent: id })
+    const spentId = req.params.id
+    const spent = await SpentService.findSpentsByIdService(spentId)
+    if (req.body.user !== spent.user.id) return res.status(400).send({ message: "Somente o usuario que criou pode deletar" })
+    await SpentService.deleteByIdService(spentId)
+    res.send({ deletedSpent: spentId })
   }
   catch (err) {
     res.status(500).send({ message: err.message })
@@ -85,7 +87,12 @@ const updateById = async (req, res) => {
     if (!date && !description && !category && !spentValue && !creditCard && !quota) return res.status(400).send({ message: 'Submit at least one field for update' })
     const { id } = req.params
     const spent = await SpentService.findSpentsByIdService(id)
-    if (req.body.user !== spent.id) return res.status(400).send({ message: "Somente o usuario que criou pode alterar" })
+    console.log(
+
+      req.body.user,
+      spent.user.id
+    );
+    if (req.body.user !== spent.user.id) return res.status(400).send({ message: "Somente o usuario que criou pode alterar" })
     await SpentService.updateService(id, date, description, category, spentValue, creditCard)
     res.send({ message: 'Spent successfully updated' })
   }

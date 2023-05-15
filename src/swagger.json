@@ -1,0 +1,31 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "spent-api",
+    "description": "Essa api serve para controle de gastos",
+    "contact": {
+      "email": "cassiocaruzo@gmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "local server"
+    }
+  ],
+  "paths": {
+    "/user/": {},
+    "/user/": {},
+    "/user/{id}": {},
+    "/user/{id}": {},
+    "/auth/": {},
+    "/spents/": {},
+    "/spents/": {},
+    "/spents/search": {},
+    "/spents/byUser": {},
+    "/spents/{id}": {},
+    "/spents/{id}": {}
+  },
+  "components": {}
+}
