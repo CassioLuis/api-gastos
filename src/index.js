@@ -17,4 +17,4 @@ app.use("/users", UserRoute)
 app.use("/spents", SpentRoute)
 app.use("/auth", AuthRoute)
 
-app.listen(port)
+app.listen(port, () => console.log(`Server runing on port: ${port}`))
