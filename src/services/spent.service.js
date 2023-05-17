@@ -1,8 +1,10 @@
 import Spent from '../models/Spent.js'
 
-const createSpentService = (body) => Spent.create(body)
+const createSpentService = (body) => Spent.create({...body, creditCard: true})
 
-const findAllSpentsService = (offset, limit) => Spent.find().sort({ _id: -1 }).skip(offset).limit(limit).populate("user")
+// const findAllSpentsService = (offset, limit) => Spent.find().sort({ _id: -1 }).skip(offset).limit(limit)//.populate("user")
+
+const findAllSpentsService = () => Spent.find()//.populate("user")
 
 const countSpents = () => Spent.countDocuments()
 

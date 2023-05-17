@@ -50,8 +50,8 @@ export const validSpent = async (req, res, next) => {
 
 export const validateRequest = (req, res, next) => {
   try {
-    const { date, description, category, spentValue, creditCard } = req.body
-    if (!date || !description || !category || !spentValue || !creditCard) {
+    const { date, description, category, spentValue } = req.body
+    if (!date || !description || !category || !spentValue ) {
       return res.status(400).send({ message: 'Existe algum campo invalido' })
     }
     next()

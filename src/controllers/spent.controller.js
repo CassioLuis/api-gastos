@@ -20,48 +20,53 @@ const createSpent = async (req, res) => {
 
 const findAllSpents = async (req, res) => {
   try {
-    let { limit, offset } = req.query
+    // let { limit, offset } = req.query
 
-    limit = Number(limit)
-    offset = Number(offset)
+    // limit = Number(limit)
+    // offset = Number(offset)
 
-    if (!limit) {
-      limit = 5
-    }
-    if (!offset) {
-      offset = 0
-    }
+    // if (!limit) {
+    //   limit = 5
+    // }
+    // if (!offset) {
+    //   offset = 0
+    // }
+    const spent = await SpentService.findAllSpentsService()
 
-    const spent = await SpentService.findAllSpentsService(offset, limit)
-    const spentTotal = await SpentService.countSpents()
-    const currentUrl = req.baseUrl
-    const next = offset + limit
-    const nextUrl = next < spentTotal ? `${currentUrl}?limit=${limit}&offset=${next}` : null
-    const previous = offset - limit < 0 ? null : offset - limit
-    const previousUrl = previous != null ? `${currentUrl}?limit=${limit}&offset=${previous}` : null
+    // const spentTotal = await SpentService.countSpents()
+    // const currentUrl = req.baseUrl
+    // const next = offset + limit
+    // const nextUrl = next < spentTotal ? `${currentUrl}?limit=${limit}&offset=${next}` : null
+    // const previous = offset - limit < 0 ? null : offset - limit
+    // const previousUrl = previous != null ? `${currentUrl}?limit=${limit}&offset=${previous}` : null
 
     if (spent.length === 0) return res.status(400).send({ message: "Não há despesas cadastradas" })
-    res.send({
-      nextUrl,
-      previousUrl,
-      limit,
-      offset,
-      spentTotal,
-      results: spent.map(
-        ({ _id: id, date, description, category, spentValue, creditCard, presentationDate, presentationQuota, user: { _id: userid, name, email } }) => ({
-          id,
-          date,
-          description,
-          category,
-          spentValue,
-          creditCard,
-          presentationDate,
-          presentationQuota,
-          userid,
-          name,
-          email
-        }))
-    })
+
+    res.send(spent)
+    // res.send({
+    //   nextUrl,
+    //   previousUrl,
+    //   limit,
+    //   offset,
+    //   spentTotal,
+    //   results: spent.map(
+    //     ({ _id: id, date, description, category, spentValue, creditCard, presentationDate, presentationQuota,
+    //       // user: { _id: userid, name, email }
+    //       }
+    //     ) => ({
+    //       id,
+    //       date,
+    //       description,
+    //       category,
+    //       spentValue,
+    //       creditCard,
+    //       presentationDate,
+    //       presentationQuota,
+    //       // userid,
+    //       // name,
+    //       // email
+    //     }))
+    // })
   }
   catch (err) {
     res.status(500).send({ message: err.message })
