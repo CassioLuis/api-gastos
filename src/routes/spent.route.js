@@ -9,7 +9,7 @@ route.post("/", validateRequest, createNewProperty, createSpentsQuotas, SpentCon
 route.get("/", SpentController.findAllSpents);
 route.get("/search", authMiddleware, SpentController.searchByDescription);
 route.get("/byUser", authMiddleware, SpentController.findByUser);
-route.delete("/:id", authMiddleware, validId, validSpent, SpentController.deleteById);
+route.delete("/:id", validId, validSpent, SpentController.deleteById);
 route.patch("/:id", authMiddleware, validId, validSpent, SpentController.updateById);
 
 export default route;

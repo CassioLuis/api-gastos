@@ -8,7 +8,7 @@ const findAllSpentsService = () => Spent.find()//.populate("user")
 
 const countSpents = () => Spent.countDocuments()
 
-const findSpentsByIdService = (id) => Spent.findById(id).populate("user")
+const findSpentsByIdService = (id) => Spent.findById(id)//.populate("user")
 
 const deleteByIdService = (id) => Spent.findByIdAndDelete(id)
 

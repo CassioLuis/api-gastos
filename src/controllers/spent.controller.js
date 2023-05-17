@@ -40,7 +40,8 @@ const findAllSpents = async (req, res) => {
     // const previous = offset - limit < 0 ? null : offset - limit
     // const previousUrl = previous != null ? `${currentUrl}?limit=${limit}&offset=${previous}` : null
 
-    if (spent.length === 0) return res.status(400).send({ message: "Não há despesas cadastradas" })
+    if (spent.length === 0) return 
+    //res.status(400).send({ message: "Não há despesas cadastradas" })
 
     res.send(spent)
     // res.send({
@@ -77,7 +78,7 @@ const deleteById = async (req, res) => {
   try {
     const spentId = req.params.id
     const spent = await SpentService.findSpentsByIdService(spentId)
-    if (req.body.user !== spent.user.id) return res.status(400).send({ message: "Somente o usuario que criou pode deletar" })
+    // if (req.body.user !== spent.user.id) return res.status(400).send({ message: "Somente o usuario que criou pode deletar" })
     await SpentService.deleteByIdService(spentId)
     res.send({ deletedSpent: spentId })
   }
