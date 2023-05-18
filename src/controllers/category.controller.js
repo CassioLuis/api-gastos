@@ -4,7 +4,7 @@ const createCategory = async (req, res) => {
   try {
     const { name, subCategory } = req.body
     if (!name) return res.status(400).send({ message: 'Existe algum campo invalido' })
-
+    
     const category = await CategoryService.createCategoryService(req.body)
 
     if (!category) return res.status(400).send({ message: "Error creating user" })
