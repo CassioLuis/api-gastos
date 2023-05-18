@@ -7,6 +7,7 @@ import dotenv from 'dotenv'
 import UserRoute from './routes/user.route.js'
 import AuthRoute from './routes/auth.route.js'
 import SpentRoute from './routes/spent.route.js'
+import CategoryRoute from './routes/category.route.js'
 
 dotenv.config();
 const app = express()
@@ -18,5 +19,6 @@ app.use(express.json())
 app.use("/users", UserRoute)
 app.use("/spents", SpentRoute)
 app.use("/auth", AuthRoute)
+app.use("/category", CategoryRoute)
 
 app.listen(port, () => console.log(`Server runing on port: ${port}`))

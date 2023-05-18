@@ -1,4 +1,3 @@
-// const express = require('express')
 import { Router } from 'express'
 import UserController from '../controllers/user.controller.js'
 import { validId, validUser } from '../middlewares/user.middlewares.js'
