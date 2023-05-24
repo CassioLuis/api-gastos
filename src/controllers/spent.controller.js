@@ -93,12 +93,7 @@ const updateById = async (req, res) => {
     if (!date && !description && !category && !spentValue && !creditCard && !quota) return res.status(400).send({ message: 'Submit at least one field for update' })
     const { id } = req.params
     const spent = await SpentService.findSpentsByIdService(id)
-    console.log(
-
-      req.body.user,
-      spent.user.id
-    );
-    if (req.body.user !== spent.user.id) return res.status(400).send({ message: "Somente o usuario que criou pode alterar" })
+    // if (req.body.user !== spent.user.id) return res.status(400).send({ message: "Somente o usuario que criou pode alterar" })
     await SpentService.updateService(id, date, description, category, spentValue, creditCard)
     res.send({ message: 'Spent successfully updated' })
   }

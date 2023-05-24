@@ -10,10 +10,6 @@ const deleteCategoryByIdService = (id) => Category.findByIdAndDelete(id)
 
 const updateCategoryService = (id, name, subCategory) => Category.findOneAndUpdate({ _id: id }, { id, name, subCategory })
 
-const searchByDescriptionService = (description) => Category.find({
-  description: { $regex: `${description || ''}`, $options: 'i' }
-}).sort({ _id: -1 }).populate("user")
-
 export default {
   createCategoryService,
   findAllCategoriesService,

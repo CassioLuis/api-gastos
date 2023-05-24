@@ -10,6 +10,6 @@ route.get("/", SpentController.findAllSpents);
 route.get("/search", authMiddleware, SpentController.searchByDescription);
 route.get("/byUser", authMiddleware, SpentController.findByUser);
 route.delete("/:id", validId, validSpent, SpentController.deleteById);
-route.patch("/:id", authMiddleware, validId, validSpent, SpentController.updateById);
+route.patch("/:id", validId, validSpent, SpentController.updateById);
 
 export default route;
