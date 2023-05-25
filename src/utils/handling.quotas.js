@@ -9,7 +9,7 @@ export const createNextSpentsByQuotas = (param) => {
   for (let i = 1; i <= quantityOfParc; i++) {
     month += 1;
     const newDate = new Date(date.getFullYear(), month, day);
-    const converted = newDate.toISOString().substring(0, 10)
+    const converted = newDate.toISOString()
     const newPayload = {
       ...param,
       date: converted,
