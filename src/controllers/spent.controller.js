@@ -9,6 +9,7 @@ const createSpent = async (req, res) => {
       if (!spent) return res.status(400).send({ message: "Error creating spent" })
     }
     else {
+      console.log(payload);
       payload.forEach(async (spent) => await SpentService.createSpentService(spent))
     }
     res.status(201).send({ message: "Spent created succesfully", payload })
@@ -40,7 +41,7 @@ const findAllSpents = async (req, res) => {
     // const previous = offset - limit < 0 ? null : offset - limit
     // const previousUrl = previous != null ? `${currentUrl}?limit=${limit}&offset=${previous}` : null
 
-    if (spent.length === 0) return 
+    if (spent.length === 0) return
     //res.status(400).send({ message: "Não há despesas cadastradas" })
 
     res.send(spent)
@@ -79,8 +80,15 @@ const deleteById = async (req, res) => {
     const spentId = req.params.id
     const spent = await SpentService.findSpentsByIdService(spentId)
     // if (req.body.user !== spent.user.id) return res.status(400).send({ message: "Somente o usuario que criou pode deletar" })
-    await SpentService.deleteByIdService(spentId)
-    res.send({ deletedSpent: spentId })
+    if (spent.uniqueForQuotas) {
+      const allSpents = await SpentService.findAllSpentsService()
+      const quotaSpentsToDelete = allSpents.filter(item => item.uniqueForQuotas === spent.uniqueForQuotas)
+      quotaSpentsToDelete.forEach(async item => await SpentService.deleteByIdService(item._id))
+      res.send({ deletedSpent: quotaSpentsToDelete })
+    } else {
+      await SpentService.deleteByIdService(spentId)
+      res.send({ deletedSpent: spentId })
+    }
   }
   catch (err) {
     res.status(500).send({ message: err.message })

@@ -32,6 +32,9 @@ const SpentSchema = new Schema({
   },
   presentationQuota: {
     type: String
+  },
+  uniqueForQuotas: {
+    type: String
   }
   // ,
   // user: {
