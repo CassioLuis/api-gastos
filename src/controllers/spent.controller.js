@@ -9,7 +9,6 @@ const createSpent = async (req, res) => {
       if (!spent) return res.status(400).send({ message: "Error creating spent" })
     }
     else {
-      console.log(payload);
       payload.forEach(async (spent) => await SpentService.createSpentService(spent))
     }
     res.status(201).send({ message: "Spent created succesfully", payload })
